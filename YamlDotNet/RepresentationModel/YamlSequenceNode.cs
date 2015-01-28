@@ -62,7 +62,7 @@ namespace YamlDotNet.RepresentationModel
 		/// </summary>
 		/// <param name="events">The events.</param>
 		/// <param name="state">The state.</param>
-		internal YamlSequenceNode(EventReader events, DocumentLoadingState state)
+		internal YamlSequenceNode(EventReader events, DocumentLoadingState state, bool allowKeyOverride)
 		{
 			SequenceStart sequence = events.Expect<SequenceStart>();
 			Load(sequence, state);
@@ -70,7 +70,7 @@ namespace YamlDotNet.RepresentationModel
 			bool hasUnresolvedAliases = false;
 			while (!events.Accept<SequenceEnd>())
 			{
-				YamlNode child = ParseNode(events, state);
+                YamlNode child = ParseNode(events, state, allowKeyOverride);
 				children.Add(child);
 				hasUnresolvedAliases |= child is YamlAliasNode;
 			}

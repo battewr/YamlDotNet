@@ -86,7 +86,7 @@ namespace YamlDotNet.RepresentationModel
 		/// Loads the stream from the specified input.
 		/// </summary>
 		/// <param name="input">The input.</param>
-		public void Load(TextReader input)
+		public void Load(TextReader input, bool allowKeyOverride)
 		{
 			documents.Clear();
 
@@ -96,7 +96,7 @@ namespace YamlDotNet.RepresentationModel
 			events.Expect<StreamStart>();
 			while (!events.Accept<StreamEnd>())
 			{
-				YamlDocument document = new YamlDocument(events);
+                YamlDocument document = new YamlDocument(events, allowKeyOverride);
 				documents.Add(document);
 			}
 			events.Expect<StreamEnd>();

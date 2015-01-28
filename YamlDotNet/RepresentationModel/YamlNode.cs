@@ -77,7 +77,7 @@ namespace YamlDotNet.RepresentationModel
 		/// <param name="events">The events.</param>
 		/// <param name="state">The state.</param>
 		/// <returns>Returns the node that has been parsed.</returns>
-		static internal YamlNode ParseNode(EventReader events, DocumentLoadingState state)
+		static internal YamlNode ParseNode(EventReader events, DocumentLoadingState state, bool allowOverrideKeys)
 		{
 			if (events.Accept<Scalar>())
 			{
@@ -86,12 +86,12 @@ namespace YamlDotNet.RepresentationModel
 
 			if (events.Accept<SequenceStart>())
 			{
-				return new YamlSequenceNode(events, state);
+				return new YamlSequenceNode(events, state, allowOverrideKeys);
 			}
 
 			if (events.Accept<MappingStart>())
 			{
-				return new YamlMappingNode(events, state);
+				return new YamlMappingNode(events, state, allowOverrideKeys);
 			}
 
 			if (events.Accept<AnchorAlias>())

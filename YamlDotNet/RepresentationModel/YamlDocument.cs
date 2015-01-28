@@ -60,7 +60,7 @@ namespace YamlDotNet.RepresentationModel
 		/// Initializes a new instance of the <see cref="YamlDocument"/> class.
 		/// </summary>
 		/// <param name="events">The events.</param>
-		internal YamlDocument(EventReader events)
+		internal YamlDocument(EventReader events, bool allowKeyOverride)
 		{
 			DocumentLoadingState state = new DocumentLoadingState();
 
@@ -69,7 +69,7 @@ namespace YamlDotNet.RepresentationModel
 			while (!events.Accept<DocumentEnd>())
 			{
 				Debug.Assert(RootNode == null);
-				RootNode = YamlNode.ParseNode(events, state);
+                RootNode = YamlNode.ParseNode(events, state, allowKeyOverride);
 
 				if (RootNode is YamlAliasNode)
 				{

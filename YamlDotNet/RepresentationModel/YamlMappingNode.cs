@@ -59,7 +59,7 @@ namespace YamlDotNet.RepresentationModel
 		/// </summary>
 		/// <param name="events">The events.</param>
 		/// <param name="state">The state.</param>
-		internal YamlMappingNode(EventReader events, DocumentLoadingState state)
+		internal YamlMappingNode(EventReader events, DocumentLoadingState state, bool overrideKeys)
 		{
 			MappingStart mapping = events.Expect<MappingStart>();
 			Load(mapping, state);
@@ -67,12 +67,19 @@ namespace YamlDotNet.RepresentationModel
 			bool hasUnresolvedAliases = false;
 			while (!events.Accept<MappingEnd>())
 			{
-				YamlNode key = ParseNode(events, state);
-				YamlNode value = ParseNode(events, state);
+				YamlNode key = ParseNode(events, state, overrideKeys);
+                YamlNode value = ParseNode(events, state, overrideKeys);
 
 				try
 				{
-					children.Add(key, value);
+				    if (children.ContainsKey(key) && overrideKeys)
+				    {
+				        children[key] = value;
+				    }
+				    else
+				    {
+				        children.Add(key, value);
+				    }
 				}
 				catch (ArgumentException err)
 				{
